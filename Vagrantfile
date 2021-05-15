@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder './', '/home/vagrant/app', type:"virtualbox",
     rsync_auto: true,
-    rsync__exclude: ['.git/', '.envrc']
+    rsync__exclude: ['.git/']
   config.vm.provision :docker, run: 'always'
   config.vm.provision :docker_compose
 
