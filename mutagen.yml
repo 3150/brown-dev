@@ -1,0 +1,9 @@
+sync:
+  app:
+    mode: "two-way-resolved"
+    alpha: "./"
+    beta: "sample:/home/vagrant/app"
+    ignore:
+      vcs: true
+      paths:
+        - "/log"
