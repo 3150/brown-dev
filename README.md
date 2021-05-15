@@ -5,4 +5,3 @@ If you are using docker with Mac OS, this repo might help.
 - Vagrant
 ## Installing
 ## Contributing
-## License
