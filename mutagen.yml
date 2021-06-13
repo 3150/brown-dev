@@ -1,9 +1,0 @@
-sync:
-  app:
-    mode: "two-way-resolved"
-    alpha: "./"
-    beta: "brown-dev:/home/vagrant/app"
-    ignore:
-      vcs: true
-      paths:
-        - "/log"
