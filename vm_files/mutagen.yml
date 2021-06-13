@@ -1,0 +1,9 @@
+sync:
+  app:
+    mode: "one-way-replica"
+    alpha: "../"
+    beta: "brown-dev:/home/vagrant/workdir"
+    ignore:
+      vcs: true
+      paths:
+        - "/log"
