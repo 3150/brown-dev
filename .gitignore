@@ -1,3 +1,4 @@
 /.idea
 /.vagrant
 mutagen.yml.lock
+*.env

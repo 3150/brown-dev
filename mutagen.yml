@@ -2,7 +2,7 @@ sync:
   app:
     mode: "two-way-resolved"
     alpha: "./"
-    beta: "sample:/home/vagrant/app"
+    beta: "brown-dev:/home/vagrant/app"
     ignore:
       vcs: true
       paths:
