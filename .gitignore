@@ -1,4 +1,4 @@
 */.idea
-/vm_files/.vagrant
+.vagrant
 mutagen.yml.lock
 *.env
