@@ -86,9 +86,9 @@ Vagrant.configure("2") do |config|
       rbenv versions | grep '2.7.3' || rbenv install 2.7.3
       rbenv versions | grep '3.0.1' || rbenv install 3.0.1
 
-      nvm install v15.14.0
-      nvm install v16.1.0
-      nvm install v16.2.0
-      nvm install v16.3.0
+      nvm ls | grep 'v15.14.0' || nvm install v15.14.0
+      nvm ls | grep 'v16.1.0' || nvm install v16.1.0
+      nvm ls | grep 'v16.2.0' || nvm install v16.2.0
+      nvm ls | grep 'v16.3.0' || nvm install v16.3.0
     SHELL
 end
