@@ -79,8 +79,7 @@ Vagrant.configure("2") do |config|
         fi
 
         declare -n versions=$1
-        for v in ${versions[@]};
-        do
+        for v in ${versions[@]}; do
           echo 'rbenv versions'
           rbenv versions | grep $v || rbenv install $v
         done
@@ -98,8 +97,7 @@ Vagrant.configure("2") do |config|
         fi
 
         declare -n versions=$1
-        for v in ${versions[@]};
-        do
+        for v in ${versions[@]}; do
           nvm ls | grep $v || nvm install $v
         done
 
