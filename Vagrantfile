@@ -50,45 +50,67 @@ Vagrant.configure("2") do |config|
                             libdb-dev -y
       sudo timedatectl set-timezone 'Asia/Singapore'
 
-      if [ ! -e ~/.goenv ]; then
-        git clone https://github.com/syndbg/goenv.git ~/.goenv
-        grep -q 'export GOENV_ROOT="$HOME/.goenv"' ~/.profile || echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.profile
-        grep -q 'export PATH="$GOENV_ROOT/bin:$PATH"' ~/.profile || echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.profile
-        grep -q 'eval "$(goenv init -)"' ~/.profile || echo 'eval "$(goenv init -)"' >> ~/.profile
-        source ~/.profile
-      fi
-
-      if [ ! -e ~/.rbenv ]; then
-        git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-        grep -q 'export PATH="~/.rbenv/bin:$PATH"' ~/.profile || echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.profile
-        grep -q 'eval "$(rbenv init -)"' ~/.profile || echo 'eval "$(rbenv init -)"' >> ~/.profile
-        source ~/.profile
-        if [ ! -e "$(rbenv root)"/plugins/ruby-build ]; then
-          git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+      install_go() {
+        if [ ! -e $HOME/.goenv ]; then
+          echo 'Installing Go'
+          git clone https://github.com/syndbg/goenv.git $HOME/.goenv
+          echo 'export GOENV_ROOT="$HOME/.goenv"' >> $HOME/.profile
+          echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> $HOME/.profile
+          echo 'eval "$(goenv init -)"' >> $HOME/.profile
+          source $HOME/.profile
         fi
-      fi
 
-      if [ ! -e ~/.nvm ]; then
-        curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-        grep -q 'export NVM_DIR="$HOME/.nvm"' ~/.profile || echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.profile
-        grep -q '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' ~/.profile || echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.profile
-        grep -q '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' ~/.profile || echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.profile
-        source ~/.profile
-        nvm install node
-      fi
+        declare -n versions=$1
+        for v in ${versions[@]}; do
+          goenv versions | grep $v || goenv install $v
+        done
 
-      goenv versions | grep '1.16.2' || goenv install 1.16.2
-      goenv versions | grep '1.16.3' || goenv install 1.16.3
-      goenv versions | grep '1.16.4' || goenv install 1.16.4
-      goenv versions | grep '1.16.5' || goenv install 1.16.5
+        echo 'Finished installing Go'
+      }
 
-      rbenv versions | grep '2.6.7' || rbenv install 2.6.7
-      rbenv versions | grep '2.7.3' || rbenv install 2.7.3
-      rbenv versions | grep '3.0.1' || rbenv install 3.0.1
+      install_ruby() {
+        if [ ! -e $HOME/.rbenv ]; then
+          echo 'Installing Ruby'
+          git clone https://github.com/rbenv/rbenv.git $HOME/.rbenv
+          git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
+          echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> $HOME/.profile
+          echo 'eval "$(rbenv init -)"' >> $HOME/.profile
+          source $HOME/.profile
+        fi
 
-      nvm ls | grep 'v15.14.0' || nvm install v15.14.0
-      nvm ls | grep 'v16.1.0' || nvm install v16.1.0
-      nvm ls | grep 'v16.2.0' || nvm install v16.2.0
-      nvm ls | grep 'v16.3.0' || nvm install v16.3.0
+        declare -n versions=$1
+        for v in ${versions[@]}; do
+          echo 'rbenv versions'
+          rbenv versions | grep $v || rbenv install $v
+        done
+
+        echo 'Finished installing Ruby'
+      }
+
+      install_node() {
+        if [ ! -e $HOME/.nvm ]; then
+          echo 'Installing Node'
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          echo 'export NVM_DIR="$HOME/.nvm"' >> $HOME/.profile
+          echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.profile
+          source $HOME/.profile
+        fi
+
+        declare -n versions=$1
+        for v in ${versions[@]}; do
+          nvm ls | grep $v || nvm install $v
+        done
+
+        echo 'Finished installing Node'
+      }
+
+      declare -a GO_VERSIONS=("1.16.2" "1.16.3" "1.16.4" "1.16.5")
+      declare -a RUBY_VERSIONS=("2.6.7" "2.7.3" "3.0.1")
+      declare -a NODE_VERSIONS=("v15.14.0" "v16.1.0" "v16.2.0" "v16.3.0")
+
+      install_go GO_VERSIONS &
+      install_ruby RUBY_VERSIONS &
+      install_node NODE_VERSIONS &
+      wait
     SHELL
 end
