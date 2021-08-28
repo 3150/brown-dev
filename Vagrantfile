@@ -96,6 +96,8 @@ Vagrant.configure("2") do |config|
           source $HOME/.profile
         fi
 
+        source $NVM_DIR/nvm.sh
+
         declare -n versions=$1
         for v in ${versions[@]}; do
           nvm ls | grep $v || nvm install $v
