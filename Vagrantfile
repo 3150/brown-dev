@@ -105,6 +105,15 @@ Vagrant.configure("2") do |config|
 
         echo 'Finished installing Node'
       }
+  
+      install_rust() {
+        if [ ! -e $HOME/.cargo ]; then
+          echo 'Installing Rust'
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          echo 'export PATH=$HOME/.cargo/bin:$PATH' >> $HOME/.profile
+          source $HOME/.profile
+        fi
+      }
 
       declare -a GO_VERSIONS=("1.16.2" "1.16.3" "1.16.4" "1.16.5")
       declare -a RUBY_VERSIONS=("2.6.7" "2.7.3" "3.0.1")
@@ -113,6 +122,7 @@ Vagrant.configure("2") do |config|
       install_go GO_VERSIONS &
       install_ruby RUBY_VERSIONS &
       install_node NODE_VERSIONS &
+      install_rust &
       wait
     SHELL
 end
