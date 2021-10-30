@@ -60,6 +60,8 @@ Vagrant.configure("2") do |config|
           source $HOME/.profile
         fi
 
+        cd $HOME/.goenv && git pull origin master
+
         declare -n versions=$1
         for v in ${versions[@]}; do
           goenv versions | grep $v || goenv install $v
@@ -77,6 +79,9 @@ Vagrant.configure("2") do |config|
           echo 'eval "$(rbenv init -)"' >> $HOME/.profile
           source $HOME/.profile
         fi
+        
+        cd $HOME/.rbenv && git pull origin master
+        cd $HOME/.rbenv/plugins/ruby-build && git pull origin master
 
         declare -n versions=$1
         for v in ${versions[@]}; do
@@ -115,9 +120,9 @@ Vagrant.configure("2") do |config|
         fi
       }
 
-      declare -a GO_VERSIONS=("1.16.2" "1.16.3" "1.16.4" "1.16.5")
+      declare -a GO_VERSIONS=("1.16.2" "1.16.3" "1.16.4" "1.16.5" "1.17.2")
       declare -a RUBY_VERSIONS=("2.6.7" "2.7.3" "3.0.1")
-      declare -a NODE_VERSIONS=("v15.14.0" "v16.1.0" "v16.2.0" "v16.3.0")
+      declare -a NODE_VERSIONS=("v15.14.0" "v16.1.0" "v16.2.0" "v16.3.0" "v16.13.0" "v17.0.1")
 
       install_go GO_VERSIONS &
       install_ruby RUBY_VERSIONS &
